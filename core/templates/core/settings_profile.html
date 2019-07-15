@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags staticfiles i18n %}
+
+{% block title %}
+    {% trans "Profile Settings" %} | Bachoter
+{% endblock title %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>{% trans 'Profile Settings' %}</h1>
+    </div>
+    <div class="col-sm-3">
+        {% include "core/_settings_menu.html" with active='profile' %}
+    </div>
+    <div class="col-sm-9">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        <form method="post" action=".">
+            {{ profile_form|crispy }}
+            {% csrf_token %} 
+            <input class="btn btn-primary btn-block" type="submit" value="{% trans 'Submit' %}" />
+        </form>
+    </div>
+{% endblock content %}

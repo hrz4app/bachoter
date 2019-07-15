@@ -1,0 +1,27 @@
+{% load staticfiles i18n %}
+
+<div id="bachCommentModal" class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4><i class="fa fa-comments-o"></i> {% trans "Comments" %}</h4>
+            </div>
+            <div class="modal-body modal-body-scroll">
+                <p class="text-center">
+                    <img src="{% static 'assets/img/ajax-loader.gif' %}">
+                </p>
+            </div>
+            <div class="modal-footer">
+                <form id="comments" method="post" action="{% url 'bachot_comment' %}">
+                    <input type="hidden" name="bachot_id" value="">
+                    <textarea class="textinput textInput form-control" cols="40" maxlength="255" name="text" rows="1" placeholder="Write comment here..." style="resize:none"></textarea>
+                    {% csrf_token %}
+                    <br>
+                    <button type="submit" class="btn btn-danger">{% trans "Submit" %}</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

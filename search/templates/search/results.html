@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load staticfiles i18n %}
+
+{% block title %}
+    {% trans "Search Results" %} | Bachoter
+{% endblock title %}
+
+{% block content %}
+    <div class="col-md-6 col-md-offset-3">
+        <div class="page-header">
+            <h1>{% trans 'Search Results' %} ({{ count }})</h1>
+        </div>
+        <div class="well nice-shadow">
+            {% for user in results %}
+                <div class="media">
+                    <div class="media-left">
+                    <a href="{% url 'profile' user.username %}">
+                        <img class="media-object img-rounded img-thumbnail img-circle" src="{{ user.profile.picture.url }}" style="height:100px;width:100px;">
+                    </a>
+                    </div>
+                    <div class="media-body">
+                        <h3 class="media-heading"><a href="{% url 'profile' user.username %}">{{ user.username }}</a></h3>
+                        {% if user.profile.bio %}
+                            <h4>{{ user.profile.bio }}</h4>
+                        {% endif %}
+                        <a href="{% url 'with_messages' user.username %}" class="btn btn-default">{% trans "Message"%}</a>
+                    </div>
+                </div>
+                {% if not forloop.last %}<hr style="border-color:#d4d4d4;">{% endif %}
+            {% empty %}
+                <h4>{% trans "Result Not Found." %}</h4>
+            {% endfor %}
+            
+        </div>
+    </div>
+{% endblock content %}

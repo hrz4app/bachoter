@@ -1,0 +1,19 @@
+{% load staticfiles crispy_forms_tags %}
+
+{% if script %}
+    <link rel="stylesheet" type="text/css" href="{% static 'extra/css/autocomplete-ui.css' %}">
+    <script type="text/javascript" src="{% static 'assets/js/jquery-ui.min.js' %}"></script>
+    <script type="text/javascript">
+        $(function() {
+            var availableTags = {{ all_track|safe }};
+            $("#searching-track").autocomplete({
+                source: availableTags
+            });
+            $("#searching-track").autocomplete("option", "appendTo", "#div_id_track_title");
+        });
+    </script>
+{% endif %}
+
+<input type="hidden" name="bachot_type" value="{{ bachot_type }}">
+{{ form|crispy }}
+{% csrf_token %}

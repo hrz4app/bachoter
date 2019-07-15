@@ -1,0 +1,76 @@
+{% load staticfiles i18n %}
+{% load counters %}
+
+
+<li class="timeline-inverted" bachot-id="{{ bachot.id }}" csrf="{{ csrf }}">
+    <div class="timeline-badge danger"><i class="fa {% if bachot.bachot_type == 'T' %}fa-quote-left{% elif bachot.bachot_type == 'P' %}fa-camera-retro{% elif bachot.bachot_type == 'L' %}fa-map-marker{% elif bachot.bachot_type == 'N' %}fa-music{% endif %}"></i></div>
+    <div class="timeline-panel">
+        {% ifequal bachot.user user  %} 
+            <span class="btn-corner">
+                <button class="btn btn-danger btn-xs delete-bachot" data-hover="tooltip" data-placement="top" data-original-title="Delete"><i class="fa fa-trash-o"></i></button>
+            </span>
+        {% endifequal %}
+        <div class="timeline-heading">
+            <a href="{% url 'profile' bachot.user.username %}"><img src="{{ bachot.user.profile.picture_thumbnail.url }}" class="img-circle img-thumbnail"></a>
+            <h3 class="timeline-title">&nbsp;<a href="{% url 'profile' bachot.user.username %}">{{ bachot.user.profile.get_screen_name }}</a></h3>
+            <p><small class="text-muted"><a href="{% url 'bachot' bachot.id %}"><i class="fa fa-clock-o"></i> {{ bachot.timestamp|timesince }} {% trans "ago" %}</a></small></p>
+            {% if bachot.bachot_type == 'L' %}
+                <p><small class="text-muted"><a href="http://maps.googleapis.com/maps/api/staticmap?center={{ bachot.bachlocation.location }}&zoom=14&size=400x300&sensor=false" target="_blank"><i class="fa fa-map-marker"></i> {% trans "at" %} {{ bachot.bachlocation.name }}</a></small></p>
+            {% endif %}
+            {% if bachot.bachot_type == 'N' %}
+                <p><small class="text-muted"><a href="{% if bachot.bachlistening.get_track.pk %}{% url 'music_track' bachot.bachlistening.get_track.pk %}{% else %}#{% endif %}"><i class="fa fa-music"></i> {% trans "Listening to" %} {% if bachot.bachlistening.get_track.title %}{{ bachot.bachlistening.get_track.title }}{% else %}{{ bachot.bachlistening.track_title }}{% endif %} {% if bachot.bachlistening.get_track.title %}{% trans "by" %} {{ bachot.bachlistening.get_track.singer.name }}{% endif %}</a></small></p>
+            {% endif %}
+        </div>
+        <div class="timeline-body">
+            {% if bachot.bachot_type == 'T' %}
+                <h5 class="bachot-text">{{ bachot.bachtext.linkify_text|safe }}</h5>
+            {% elif bachot.bachot_type == 'P' %}
+                <img src="{{ bachot.bachpicture.picture.url }}" class="img-responsive" style="width: 100%; display: block;">
+                <h5 class="bachot-text">{{ bachot.bachpicture.linkify_caption|safe }}</h5>
+            {% elif bachot.bachot_type == 'L' %}
+                {% if bachot.bachlocation.picture %}
+                    <img src="{{ bachot.bachlocation.picture.url }}" class="img-responsive" style="width: 100%; display: block;">
+                {% endif %}
+                <h5 class="bachot-text">{{ bachot.bachlocation.linkify_caption|safe }}</h5>  
+            {% elif bachot.bachot_type == 'N' %}
+                <h5 class="bachot-text">{{ bachot.bachlistening.linkify_caption|safe }}</h5>              
+            {% endif %}
+            <div class="progress">
+                <div class="progress-bar progress-bar-success" role="progressbar" style="width:{% likes_percentage %}%">{% if bachot.likers.count %}{{ bachot.likers.count }}{% endif %}</div>
+                <div class="progress-bar progress-bar-danger" role="progressbar" style="width:{% dislikes_percentage %}%">{% if bachot.dislikers.count %}{{ bachot.dislikers.count }}{% endif %}</div>
+            </div>
+            <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                {% if user not in bachot.likers.all and user not in bachot.dislikers.all %}
+                    <div class="btn-group" role="group">
+                        <form class="likes-dislikes" method="post" action="{% url 'bachot_like_or_dislike' %}">
+                            <input type="hidden" name="bachot_id" value="{{ bachot.id }}">
+                            <input type="hidden" name="likes_dislikes" value="like" >
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-thumbs-up"></i> {% trans "Like" %}</button>
+                        </form>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <form class="likes-dislikes" method="post" action="{% url 'bachot_like_or_dislike' %}">
+                            <input type="hidden" name="bachot_id" value="{{ bachot.id }}">
+                            <input type="hidden" name="likes_dislikes" value="dislike" >
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-default"><i class="fa fa-thumbs-down"></i> {% trans "Dislike" %}</button>
+                        </form>
+                    </div>
+                {% endif %}
+                {% if user in bachot.likers.all %}
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default disabled"><i class="fa fa-thumbs-up"></i> {% trans "Liked" %}</button>
+                    </div>
+                {% endif %}
+                {% if user in bachot.dislikers.all %}
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default disabled"><i class="fa fa-thumbs-up"></i> {% trans "Disliked" %}</button>
+                    </div>
+                {% endif %}
+            </div>
+            <br>
+            <a href="#" data-toggle="modal" data-target="#bachCommentModal">{% trans "Comment" %} (<span class="comment-count">{{ bachot.comments.count }}</span>)</a>
+        </div>
+    </div>
+</li>

@@ -1,0 +1,14 @@
+{% load staticfiles i18n %}
+{% load el_pagination_tags %}
+
+{% paginate 10 bachots %}
+{% for bachot in bachots %}
+    {% include "social/_bachot.html" with bachot=bachot csrf=csrf %}
+{% endfor %}
+{% show_more loading='<img src="/static/assets/img/ajax-loader.gif" style="width:20px">' %}
+
+<script type="text/javascript">
+	$('.endless_container').css('padding-left', '90px');
+    $('.endless_more').hide();
+    $('.endless_loading').addClass('text-center');
+</script>

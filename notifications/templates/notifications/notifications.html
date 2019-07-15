@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load staticfiles i18n %}
+
+{% block title %}
+    {% trans "Notifications" %} | Bachoter
+{% endblock title %}
+
+{% block content %}
+    <div class="col-md-6 col-md-offset-3">
+        <div class="page-header">
+            <h1><i class="fa fa-bell-o"></i> {% trans 'Notifications' %}</h1>
+        </div>
+        <ul class="media-list">
+            {% include page_template %}
+        </ul>
+    </div>
+{% endblock content %}
+
+{% block boot %}
+    <script type="text/javascript" src="{% static 'el-pagination/js/el-pagination.js' %}"></script>
+    <script type="text/javascript">
+        $.endlessPaginate({
+            paginateOnScroll: true
+        });
+    </script>
+{% endblock boot %}

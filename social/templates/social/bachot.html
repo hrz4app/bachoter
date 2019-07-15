@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load staticfiles i18n %}
+
+{% block title %}
+    {% trans "Bachot" %} | Bachoter
+{% endblock title %}
+
+{% block head %}
+    <script type="text/javascript" src="{% static 'extra/js/bachothandler.js' %}"></script>
+{% endblock head %}
+
+{% block content %}
+    {% if user.buddy in buddies_list or user == bachot.user %}
+        {% include 'social/modal_comments.html' %}
+        <div class="col-md-6 col-md-offset-3">
+            <div class="page-header">
+                <h1><i class="fa fa-microphone"></i> {% trans 'Bachot' %}</h1>
+            </div>
+            <ul class="timeline">
+                {% include 'social/_bachot.html' %}
+            </ul>
+        </div>
+    {% else %}
+        <div class="col-md-6 col-md-offset-3">
+            <div class="page-header">
+                <h1>{% trans 'Bachot' %}{{ user }}</h1>
+            </div>
+            <div class="well nice-shadow text-center">
+                <h4>{% trans "Forbidden" %}</h4>
+            </div>
+        </div>
+    {% endif %}
+{% endblock content %}

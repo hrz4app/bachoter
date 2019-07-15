@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags i18n %}
+
+{% block content %}
+    <div class="col-sm-6 col-sm-offset-3">
+        <div class="well">
+            <h1>{% trans "Register" %}</h1>
+            <form method="post" action=".">
+                {{ form|crispy }}
+                {% csrf_token %}
+                <input class="btn btn-primary btn-block" type="submit" value="{% trans 'Submit' %}">
+            </form>
+            <hr>
+            <p>{% trans "Member" %}? <a href="{% url 'auth_login' %}">{% trans "Login" %}</a>!</p>
+        </div>
+    </div>
+{% endblock %}

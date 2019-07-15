@@ -1,0 +1,88 @@
+{% load staticfiles i18n %}
+{% load counters %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}Bachoter{% endblock title %}</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'assets/css/bootstrap.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'assets/css/font-awesome.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'assets/css/bachoter.css' %}">
+        <script type="text/javascript" src="{% static 'assets/js/jquery.js' %}"></script>
+        <script type="text/javascript" src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+        <link rel="icon" type="image/png" href="{% static 'assets/img/favicon.png' %}">
+        {% block head %}{% endblock head %}
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="{% url 'landing' %}" style="font-family:'Pacifico';font-size:25px;">{% trans "Bachoter" %}</a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="navbar-menu">
+                        {% if not request.user.is_authenticated and request.get_full_path == '/' %}
+                            <form class="navbar-form navbar-right" method="post" action="{% url 'auth_login' %}">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="username" placeholder="Username">
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" class="form-control" name="password" placeholder="Password">
+                                </div>
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-default">{% trans "Login" %}</button>
+                            </form>
+                        {% elif request.user.is_authenticated %}
+                            <ul class="nav navbar-nav">
+                                <li><a href="{% url 'timeline' %}"><i class="fa fa-paw"></i> {% trans 'Timeline' %}</a></li>
+                                <li><a href="{% url 'buddies' %}"><i class="fa fa-circle-o"></i> {% trans 'Buddies' %}</a></li>
+                                <li><a href="{% url 'buddies_pending' %}"><i class="fa fa-circle-o-notch"></i> {% trans 'Pending' %}</a></li>
+                                {% if not hide_search %}
+                                    <form class="navbar-form navbar-left" action="{% url 'search' %}" role="search">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="buddy" placeholder="Search" value="{{ q }}">
+                                            <span class="input-group-btn">
+                                                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                            </span>
+                                        </div>
+                                    </form>
+                                {% endif %}
+                            </ul>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li><a href="{% url 'notifications' %}"><i class="fa fa-bell-o"></i> {% trans 'Notifications' %} <span class="badge" id="unread-count">{% notifications_count %}</span></a></li>
+                                <li><a href="{% url 'buddies_request' %}"><i class="fa fa-circle-thin"></i> {% trans 'Request' %} <span class="badge" id="unread-count">{% request_list_count %}</span></a></li>
+                                <li>
+                                    <a href="{% url 'profile' user.username %}">{{ user.profile.get_screen_name }}</a>
+                                </li>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                    <li><a href="{% url 'default_messages' %}"><span class="badge pull-right" id="unread-count">{% inbox_count %}</span><i class="fa fa-comment"></i> {% trans "Inbox" %}</a></li>
+                                    <li><a href="{% url 'settings_profile' %}"><i class="fa fa-cogs"></i> {% trans 'Settings' %}</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="{% url 'auth_logout' %}"><i class="fa fa-sign-out"></i> {% trans 'Log out' %}</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <main>
+            <div class="container" style="margin-top:60px;margin-bottom:50px;">
+                {% block content %}{% endblock content %}
+            </div>
+        </main>
+        {% block boot %}{% endblock boot %}
+    </body>
+</html>

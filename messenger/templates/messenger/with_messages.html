@@ -1,0 +1,34 @@
+{% extends "messenger/base_messages.html" %}
+{% load staticfiles i18n %}
+
+{% block page_header %}{{ active }}{% endblock %}
+
+{% block sub_content %}
+    {% if messages %}
+        <ul class="conversation">
+            <li class="send-message">
+                <img src="{{ user.profile.picture.url }}" class="picture">
+                <div style="margin-top: .3em">
+                    <form role="form" method="post" action="{% url 'send_messages' %}" id="send">
+                        <input type="hidden" name="to" value="{{ active }}">
+                        <input class="form-control" type="text" name="message" placeholder="{% trans 'Write a message' %}..." maxlength="1000" autocomplete="off">
+                        {% csrf_token %}
+                    </form>
+                </div>
+            </li>
+            {% include page_template %}
+        </ul>
+    {% else %}
+        <h4>{% trans "You have no conversation with " %}{{ active }}.</h4>
+        <a href="{% url 'new_messages' %}?u={{ active }}" class="btn btn-default">{% trans "Start conversation"%}</a>
+    {% endif %}
+{% endblock sub_content %}
+
+{% block sub_boot %}
+    <script type="text/javascript" src="{% static 'el-pagination/js/el-pagination.js' %}"></script>
+    <script type="text/javascript">
+        $.endlessPaginate({
+            paginateOnScroll: true
+        });
+    </script>
+{% endblock sub_boot %}

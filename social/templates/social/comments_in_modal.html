@@ -1,0 +1,20 @@
+{% load i18n %}
+
+<script type="text/javascript">
+    $(function(){
+        $('[data-hover="tooltip"]').tooltip({
+            trigger: 'hover'
+        });
+    });
+</script>
+
+<div class="col-md-10 col-md-offset-1">
+    <ul class="media-list well">
+        {% for comment in comments %}
+            {% include 'social/_comments_in_modal.html' with comment=comment csrf=csrf %}
+            {% if not forloop.last %}<hr style="border-color:#d4d4d4;">{% endif %}
+        {% empty %}
+            <h4 class="text-center">{% trans "Nothing to show." %}</h4>
+        {% endfor %}
+    </ul>
+</div>

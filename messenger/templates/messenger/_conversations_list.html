@@ -1,0 +1,15 @@
+{% load i18n %}
+
+<div class="list-group">
+    {% for conversation in conversations %}
+        <a href="{% url 'with_messages' conversation.user.username %}" class="list-group-item{% if active == conversation.user.username %} active{% endif %}">
+            <img src="{{ conversation.user.profile.picture.url }}" class="conversation-portrait">
+            {{ conversation.user.profile.get_screen_name }}
+            {% if conversation.unread > 0 %}
+                <span class="badge pull-right">{{ conversation.unread }}</span>
+            {% endif %}
+        </a>
+    {% empty %}
+        <a href="{% url 'new_messages' %}" class="list-group-item">{% trans 'Start a conversation' %}</a>
+    {% endfor %}
+</div>

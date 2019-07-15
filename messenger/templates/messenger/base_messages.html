@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load staticfiles i18n %}
+
+{% block title %}
+    {% trans "Messenger" %} | Bachoter
+{% endblock title %}
+
+{% block head %}
+    <link href="{% static 'extra/css/messages.css' %}" rel="stylesheet">
+    <script src="{% static 'extra/js/messages.js' %}"></script>
+{% endblock head %}
+
+{% block content %}
+    <div class="page-header">
+        <a href="{% url 'new_messages' %}" class="btn btn-primary pull-right">{% trans "Compose Message" %}</a>
+        <h1>{% block page_header %}{% endblock %}</h1>
+    </div>
+    <div class="row" style="margin-top: 1em">
+        <div class="col-md-3">
+            {% include 'messenger/_conversations_list.html' with conversations=conversations active=active %}
+        </div>
+        <div class="col-md-9">
+            {% block sub_content %}{% endblock sub_content %}
+        </div>
+    </div>
+{% endblock content %}
+
+{% block boot %}
+    {% block sub_boot %}
+        
+    {% endblock sub_boot %}
+{% endblock boot %}

@@ -1,0 +1,23 @@
+{% load staticfiles i18n %}
+{% load el_pagination_tags %}
+
+{% paginate 10 notifications %}
+{% for notification in notifications %}
+    <li class="media">
+        <div class="media-left">
+            <a href="{% url 'profile' notification.from_user.username %}"><img class="media-object img-circle img-thumbnail" src="{{ notification.from_user.profile.picture_thumbnail.url }}" style="width:40px;"></a>
+        </div>
+        <div class="media-body">
+            <small class="text-muted"><i class="fa fa-clock-o"></i> {{ notification.timestamp|timesince }} {% trans "ago" %}</small>
+            <p class="media-heading">{{ notification|safe }}</p>
+        </div>
+    </li>
+{% empty %}
+    <li>{% trans 'You have no notification' %}</li>
+{% endfor %}
+{% show_more loading='<img src="/static/assets/img/ajax-loader.gif" style="width:20px">' %}
+
+<script type="text/javascript">
+    $('.endless_more').hide();
+    $('.endless_loading').addClass('text-center');
+</script>

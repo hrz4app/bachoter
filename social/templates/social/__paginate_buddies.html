@@ -1,0 +1,32 @@
+{% load staticfiles i18n %}
+{% load el_pagination_tags %}
+
+{% paginate 10 buddies %}
+{% for buddy in buddies %}
+    <div class="well nice-shadow">
+        <div class="media">
+            <div class="media-left">
+            <a href="{% url 'profile' buddy.user.username %}">
+                <img class="media-object img-rounded img-thumbnail img-circle" src="{{ buddy.user.profile.picture_thumbnail.url }}" style="height:100px;width:100px;">
+            </a>
+            </div>
+            <div class="media-body">
+                <h3 class="media-heading"><a href="{% url 'profile' buddy.user.username %}">{{ buddy.user.profile.get_screen_name }}</a></h3>
+                {% if buddy.user.profile.bio %}
+                    <h4>{{ buddy.user.profile.bio }}</h4>
+                {% endif %}
+                <a href="{% url 'with_messages' buddy.user.username %}" class="btn btn-default">{% trans "Message"%}</a>
+            </div>
+        </div>
+    </div>
+{% empty %}
+    <div class="well nice-shadow">
+        <h4>{{ empty }}</h4>
+    </div>
+{% endfor %}
+{% show_more loading='<img src="/static/assets/img/ajax-loader.gif" style="width:20px">' %}
+
+<script type="text/javascript">
+    $('.endless_more').hide();
+    $('.endless_loading').addClass('text-center');
+</script>

@@ -1,0 +1,19 @@
+{% load i18n %}
+
+<li class="media" bachot-id="{{ comment.bachot.id }}" comment-id="{{ comment.id }}" csrf="{{ csrf }}">
+    {% ifequal comment.user user  %} 
+        <span class="btn-corner">
+            <button class="btn btn-danger btn-xs delete-comment pull-right" data-hover="tooltip" data-placement="top" data-original-title="Delete"><i class="fa fa-trash-o"></i></button>
+        </span>
+    {% endifequal %}
+    <div class="media-left">
+        <a href="{% url 'profile' comment.user.username %}">
+            <img class="media-object img-circle img-thumbnail" src="{{ comment.user.profile.picture.url }}" style="width:40px;">
+        </a>
+    </div>
+        <div class="media-body">
+        <h4 class="media-heading"><a href="{% url 'profile' comment.user.username %}">{{ comment.user.profile.get_screen_name }}</a></h4>
+        <p><small class="text-muted"><i class="fa fa-clock-o"></i> {{ comment.timestamp|timesince }} {% trans "ago" %}</small></p>
+        <p>{{ comment.linkify_text|safe }}</p>
+    </div>
+</li>

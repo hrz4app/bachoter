@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load staticfiles i18n %}
+
+{% block title %}
+    {% trans "Buddies" %} | Bachoter
+{% endblock title %}
+
+{% block content %}
+    <div class='col-sm-6 col-sm-offset-3'>
+        <div class="page-header">
+            <h1><i class="fa fa-circle-o"></i> {{ page_header|safe }}</h1>
+        </div>
+            {% include page_template %}
+    </div>
+{% endblock content %}
+
+{% block boot %}
+    <script type="text/javascript" src="{% static 'el-pagination/js/el-pagination.js' %}"></script>
+    <script type="text/javascript">
+        $.endlessPaginate({
+            paginateOnScroll: true
+        });
+    </script>
+{% endblock boot %}

@@ -1,0 +1,13 @@
+{% load staticfiles i18n %}
+{% load el_pagination_tags %}
+
+{% paginate 10 messages %}
+{% for message in messages %}
+    {% include 'messenger/_with_messages_list.html' with message=message %}
+{% endfor %}
+{% show_more loading='<img src="/static/assets/img/ajax-loader.gif" style="width:20px">' %}
+
+<script type="text/javascript">
+    $('.endless_more').hide();
+    $('.endless_loading').addClass('text-center');
+</script>
