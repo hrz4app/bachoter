@@ -6,7 +6,7 @@ django-crispy-forms==1.6.0
 django-el-pagination==2.1.2
 django-imagekit==3.3
 django-location-field==2.0.0b0
-django-registration==2.1
+django-registration==3.1.2
 django-storages==1.4.1
 gunicorn==19.4.5
 html5lib==0.9999999
