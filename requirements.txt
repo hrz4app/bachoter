@@ -11,7 +11,7 @@ django-storages==1.4.1
 gunicorn==19.4.5
 html5lib==0.9999999
 pilkit==1.1.13
-Pillow==3.2.0
+Pillow==9.0.1
 psycopg2==2.6.1
 python-decouple==3.0
 six==1.10.0
